@@ -96,7 +96,7 @@ global gSwapSleep := SwapSleep
 IniRead, RestartStackTime, UserSettings.ini, Section1, RestartStackTime, 12000
 global gRestartStackTime := RestartStackTime
 ;Intall location
-IniRead, GameInstallPath, Usersettings.ini, Section1, GameInstallPath, C:\Program Files (x86)\Steam\steamapps\common\IdleChampions\IdleDragons.exe
+IniRead, GameInstallPath, Usersettings.ini, Section1, GameInstallPath, explorer.exe "com.epicgames.launcher://apps/40cb42e38c0b4a14a1bb133eb3291572?action=launch&silent=true"
 global gInstallPath := GameInstallPath
 ;Normal SB farm max time
 IniRead, SBTimeMax, UserSettings.ini, Section1, SBTimeMax, 60000
@@ -170,7 +170,7 @@ Gui, MyWindow:Add, Text, x15 y+2, 5. `Click the save button to save your setting
 Gui, MyWindow:Add, Text, x15 y+2, 6. Load into zone 1 of an adventure to farm gems.
 Gui, MyWindow:Add, Text, x15 y+2, 7. Press the run button to start farming gems.
 Gui, MyWindow:Add, Text, x15 y+10, Notes:
-Gui, MyWindow:Add, Text, x15 y+2, 1. Use the pause hotkey, ``, to adjust settings after a run starts.
+Gui, MyWindow:Add, Text, x15 y+2, 1. Use the pause hotkey, RightALT+P, to adjust settings after a run starts.
 Gui, MyWindow:Add, Text, x15 y+2, 2. Don't forget to unpause after saving your settings.
 Gui, MyWindow:Add, Text, x15 y+2, 3. First run is ignored for stats, in case it is a partial run.
 Gui, MyWindow:Add, Text, x15 y+2, 4. Settings save to and load from UserSettings.ini file.
@@ -574,7 +574,7 @@ MyWindowGuiClose()
     return True
 }
 
-$`::
+$>!P::
 Pause
 gPrevLevelTime := A_TickCount
 return
@@ -585,7 +585,7 @@ SafetyCheck()
     While (Not WinExist("ahk_exe IdleDragons.exe")) 
     {
         Run, %gInstallPath%
-        ;Run, "C:\Program Files (x86)\Steam\steamapps\common\IdleChampions\IdleDragons.exe"
+        ;Run, "explorer.exe "com.epicgames.launcher://apps/40cb42e38c0b4a14a1bb133eb3291572?action=launch&silent=true""
         StartTime := A_TickCount
         ElapsedTime := 0
         GuiControl, MyWindow:, gloopID, Opening IC

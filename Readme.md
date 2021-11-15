@@ -1,3 +1,9 @@
+# Idle Champions automation for Epic Games Store
+1. Synced with latest version from @mikebaldi
+2. All pointers and offsets changed for EGS
+3. Install path changed for EGS
+4. Pause key changed to rightAlt+P
+
 # 11/2/21 UPDATE INCLUDES TWO NEW FILES: IC_ArrayFunctions.AHK & IC_GameManagerClass.AHK
 
 ### Warning:
@@ -18,7 +24,6 @@ Review AutoHotkey tutorials and documentation.
 
 ## Notes:
 1. Script requires Briv and Modron Automation.
-2. This script is for the Steam PC version of the game. For the EGS PC version of the game: https://github.com/CantRowOfficial/Idle-Champions-EGS
 
 # Settings Documentation:
 

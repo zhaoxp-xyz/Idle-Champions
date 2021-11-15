@@ -436,7 +436,7 @@ ReadAutoProgressToggled(UpdateGUI := 0, GUIwindow := "MyWindow:")
 getListItemOffset( listItem, listStartValue )
 {
     listItem -= listStartValue
-    return 0x10 + ( listItem * 0x4 )
+    return 0x20 + ( listItem * 0x8 )
 }
 
 ConvQuadToString(FirstEight, SecondEight)
