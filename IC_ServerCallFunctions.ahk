@@ -1,4 +1,5 @@
 ;date of script: 5/14/21
+#include IC_MemoryFunctions.ahk
 
 ;globals used to track chest opening and purchases
 global gSCGemsSpent := 0
@@ -13,8 +14,8 @@ global gSCRedRubiesSpentStart :=
 global DummyData := "&language_id=1&timestamp=0&request_id=0&network_id=11&mobile_client_version=999"
 global ActiveInstance :=
 global InstanceID :=
-global UserID :=
-global UserHash := ""
+global UserID := ReadUserID(1)
+global UserHash := ReadUserHash(1) 
 global advtoload :=
 global gSilversHoarded := ;variable to store amount of chests hoarded
 global gSilversOpened := ;variable to store amount of chests opened
@@ -27,7 +28,7 @@ global gRedRubiesSpent := ;variable to store amount of gems server thinks you ha
 
 ServerCall(callname, parameters) 
 {
-	URLtoCall := "http://ps6.idlechampions.com/~idledragons/post.php?call=" callname parameters
+	URLtoCall := "http://ps7.idlechampions.com/~idledragons/post.php?call=" callname parameters
 	;GuiControl, MyWindow:, advparamsID, % URLtoCall
 	WR := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 	WR.SetTimeouts("10000", "10000", "10000", "10000")
@@ -45,14 +46,14 @@ GetUserDetails()
 {
 	getuserparams := DummyData "&include_free_play_objectives=true&instance_key=1&user_id=" UserID "&hash=" UserHash
 	rawdetails := ServerCall("getuserdetails", getuserparams)
-	Try
-	{
+	;~ Try
+	;~ {
 		UserDetails := JSON.parse(rawdetails)
-	}
-	Catch
-	{
-		Return
-	}
+	;~ }
+	;~ Catch
+	;~ {
+		;~ Return
+	;~ }
     InstanceID := UserDetails.details.instance_id
     GuiControl, MyWindow:, InstanceIDID, % InstanceID
 	ActiveInstance := UserDetails.details.active_game_instance_id
@@ -78,6 +79,8 @@ GetUserDetails()
 
 LoadAdventure() 
 {
+	if (advtoload < 0)
+		advtoload := 30
 	advparams := DummyData "&patron_tier=0&user_id=" UserID "&hash=" UserHash "&instance_id=" InstanceID "&game_instance_id=" ActiveInstance "&adventure_id=" advtoload "&patron_id=0"
     ServerCall("setcurrentobjective", advparams)
 	return

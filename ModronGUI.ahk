@@ -96,7 +96,7 @@ global gSwapSleep := SwapSleep
 IniRead, RestartStackTime, UserSettings.ini, Section1, RestartStackTime, 12000
 global gRestartStackTime := RestartStackTime
 ;Intall location
-IniRead, GameInstallPath, Usersettings.ini, Section1, GameInstallPath, explorer.exe "com.epicgames.launcher://apps/40cb42e38c0b4a14a1bb133eb3291572?action=launch&silent=true"
+IniRead, GameInstallPath, Usersettings.ini, Section1, GameInstallPath, C:\Program Files (x86)\Steam\steamapps\common\IdleChampions\IdleDragons.exe
 global gInstallPath := GameInstallPath
 ;Normal SB farm max time
 IniRead, SBTimeMax, UserSettings.ini, Section1, SBTimeMax, 60000
@@ -170,7 +170,7 @@ Gui, MyWindow:Add, Text, x15 y+2, 5. `Click the save button to save your setting
 Gui, MyWindow:Add, Text, x15 y+2, 6. Load into zone 1 of an adventure to farm gems.
 Gui, MyWindow:Add, Text, x15 y+2, 7. Press the run button to start farming gems.
 Gui, MyWindow:Add, Text, x15 y+10, Notes:
-Gui, MyWindow:Add, Text, x15 y+2, 1. Use the pause hotkey, RightALT+P, to adjust settings after a run starts.
+Gui, MyWindow:Add, Text, x15 y+2, 1. Use the pause hotkey, ``, to adjust settings after a run starts.
 Gui, MyWindow:Add, Text, x15 y+2, 2. Don't forget to unpause after saving your settings.
 Gui, MyWindow:Add, Text, x15 y+2, 3. First run is ignored for stats, in case it is a partial run.
 Gui, MyWindow:Add, Text, x15 y+2, 4. Settings save to and load from UserSettings.ini file.
@@ -574,7 +574,7 @@ MyWindowGuiClose()
     return True
 }
 
-$>!P::
+$`::
 Pause
 gPrevLevelTime := A_TickCount
 return
@@ -585,7 +585,7 @@ SafetyCheck()
     While (Not WinExist("ahk_exe IdleDragons.exe")) 
     {
         Run, %gInstallPath%
-        ;Run, "explorer.exe "com.epicgames.launcher://apps/40cb42e38c0b4a14a1bb133eb3291572?action=launch&silent=true""
+        ;Run, "C:\Program Files (x86)\Steam\steamapps\common\IdleChampions\IdleDragons.exe"
         StartTime := A_TickCount
         ElapsedTime := 0
         GuiControl, MyWindow:, gloopID, Opening IC
@@ -604,7 +604,6 @@ SafetyCheck()
         OpenProcess()
         GuiControl, MyWindow:, gloopID, Loading Module Base
         Sleep gGetAddress
-        ModuleBaseAddress()
 
         LoadingZoneREV()
         if (gUlts)
@@ -729,7 +728,7 @@ DoDashWait()
     StartTime := A_TickCount
     ElapsedTime := 0
     GuiControl, MyWindow:, gloopID, Finishing Zone 1
-    while (ReadCurrentZone(1) == 1 AND ElapsedTime < 5000)
+    while (ReadCurrentZone(1) == 1 AND ElapsedTime < 3000)
     {
         SetFormation(1)
         DirectedInput("{Right}")
@@ -801,14 +800,14 @@ LoadingZoneREV()
     StartTime := A_TickCount
     ElapsedTime := 0
     GuiControl, MyWindow:, gloopID, Loading Zone
-    while (ReadChampBenchedByID(1,, 58) != 1 AND ElapsedTime < 60000)
+    while (ReadChampBenchedByID(1,, 58) != 1 AND ElapsedTime < 5000)
     {
         DirectedInput("e{F5}e")
         ElapsedTime := UpdateElapsedTime(StartTime)
         UpdateStatTimers()
     }
     ;check if stuck function would fail here on some cases where game gets stuck in offline progress calc, common after invalid instance. memory would read as if progress was still happening.
-    if (ElapsedTime > 60000)
+    if (ElapsedTime > 5000)
     {
         CloseIC()
         Sleep, 1000
@@ -818,14 +817,14 @@ LoadingZoneREV()
     StartTime := A_TickCount
     ElapsedTime := 0
     GuiControl, MyWindow:, gloopID, Confirming Zone Load
-    while (ReadChampBenchedByID(1,, 58) != 0 AND ElapsedTime < 30000)
+    while (ReadChampBenchedByID(1,, 58) != 0 AND ElapsedTime < 5000)
     {
         DirectedInput("w{F5}w")
         ElapsedTime := UpdateElapsedTime(StartTime)
         UpdateStatTimers()
     }
     ;check if stuck function would fail here on some cases where game gets stuck in offline progress calc, common after invalid instance. memory would read as if progress was still happening.
-    if (ElapsedTime > 30000)
+    if (ElapsedTime > 5000)
     {
         CloseIC()
         Sleep, 1000
@@ -839,13 +838,13 @@ LoadingZoneOne()
     StartTime := A_TickCount
     ElapsedTime := 0
     GuiControl, MyWindow:, gloopID, Loading Zone
-    while (ReadChampBenchedByID(1,, 58) != 0 AND ElapsedTime < 60000)
+    while (ReadChampBenchedByID(1,, 58) != 0 AND ElapsedTime < 5000)
     {
         DirectedInput("q{F5}q")
         ElapsedTime := UpdateElapsedTime(StartTime)
         UpdateStatTimers()
     }
-    if (ElapsedTime > 60000)
+    if (ElapsedTime > 5000)
     {
         CheckifStuck(gprevLevel)
     }
@@ -853,13 +852,13 @@ LoadingZoneOne()
     StartTime := A_TickCount
     ElapsedTime := 0
     GuiControl, MyWindow:, gloopID, Confirming Zone Load
-    while (ReadChampBenchedByID(1,, 58) != 1 AND ElapsedTime < 60000)
+    while (ReadChampBenchedByID(1,, 58) != 1 AND ElapsedTime < 5000)
     {
         DirectedInput("e{F5}e")
         ElapsedTime := UpdateElapsedTime(StartTime)
         UpdateStatTimers()
     }
-    if (ElapsedTime > 60000)
+    if (ElapsedTime > 5000)
     {
         CheckifStuck(gprevLevel)
     }
@@ -1149,7 +1148,6 @@ UpdateElapsedTime(StartTime)
 GemFarm() 
 {  
     OpenProcess()
-    ModuleBaseAddress()
     ;not sure why this one is here, commented out for now.
     ;GetUserDetails()
     UserID := ReadUserID(1)
