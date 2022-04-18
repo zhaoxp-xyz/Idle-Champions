@@ -38,7 +38,7 @@ class IC_GameManager_Class
         return this.Main.isTarget64bit
     }
 
-    Refresh()
+    Refresh(ICID := 0)
     {
         ;Open a process with sufficient access to read and write memory addresses (this is required before you can use the other functions)
         ;You only need to do this once. But if the process closes/restarts, then you will need to perform this step again. Refer to the notes section below.
@@ -48,7 +48,13 @@ class IC_GameManager_Class
         ;==================
         ;structure pointers
         ;==================
-        this.Main := new _ClassMemory("ahk_exe IdleDragons.exe", "", hProcessCopy)
+        if ( ICID <= 0 )
+        {
+            this.Main := new _ClassMemory("ahk_exe IdleDragons.exe", "", hProcessCopy)
+        }
+        Else{
+            this.Main := new _ClassMemory("ahk_id "%ICID%, "", hProcessCopy)
+        }
         this.BaseAddress := this.Main.getModuleBaseAddress("mono-2.0-bdwgc.dll")+0x003A0574
         ;=========================================
         ;Base addresses and Handlers
